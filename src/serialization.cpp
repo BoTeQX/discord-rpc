@@ -157,9 +157,23 @@ size_t JsonWriteRichPresenceObj(char* dest,
                     WriteOptionalString(writer, "join", presence->joinSecret);
                     WriteOptionalString(writer, "spectate", presence->spectateSecret);
                 }
-
+                
                 writer.Key("instance");
                 writer.Bool(presence->instance != 0);
+
+                if (presence->buttons) {
+                    WriteArray buttons(writer, "buttons");
+
+                    const DiscordPresenceButton* current = presence->buttons;
+                    do {
+                        if (current->label && current->url) {
+                            WriteObject button(writer);
+
+                            WriteOptionalString(writer, "label", current->label);
+                            WriteOptionalString(writer, "url", current->url);
+                        }
+                    } while ((current = current->next) != NULL);
+                }
             }
         }
     }

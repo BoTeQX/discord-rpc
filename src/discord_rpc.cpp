@@ -366,6 +366,18 @@ extern "C" DISCORD_EXPORT void Discord_Shutdown(void)
     RpcConnection::Destroy(Connection);
 }
 
+// added for debug
+extern "C" DISCORD_EXPORT char* Discord_GetPresenceJson(size_t* size)
+{
+    if (QueuedPresence.length > 0) {
+        if (size != nullptr) {
+            *size = QueuedPresence.length;
+        }
+        return QueuedPresence.buffer;
+    }
+    return nullptr;
+}
+
 extern "C" DISCORD_EXPORT void Discord_UpdatePresence(const DiscordRichPresence* presence)
 {
     {

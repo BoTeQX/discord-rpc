@@ -23,6 +23,12 @@
 extern "C" {
 #endif
 
+typedef struct DiscordPresenceButton {
+    const char* label;
+    const char* url;
+    const struct DiscordPresenceButton* next;
+} DiscordPresenceButton;
+
 typedef struct DiscordRichPresence {
     const char* state;   /* max 128 bytes */
     const char* details; /* max 128 bytes */
@@ -39,6 +45,7 @@ typedef struct DiscordRichPresence {
     const char* matchSecret;    /* max 128 bytes */
     const char* joinSecret;     /* max 128 bytes */
     const char* spectateSecret; /* max 128 bytes */
+    const DiscordPresenceButton* buttons;
     int8_t instance;
 } DiscordRichPresence;
 
@@ -69,6 +76,8 @@ DISCORD_EXPORT void Discord_Initialize(const char* applicationId,
                                        int autoRegister,
                                        const char* optionalSteamId);
 DISCORD_EXPORT void Discord_Shutdown(void);
+
+DISCORD_EXPORT char* Discord_GetPresenceJson(size_t* size);
 
 /* checks for incoming messages, dispatches callbacks */
 DISCORD_EXPORT void Discord_RunCallbacks(void);
